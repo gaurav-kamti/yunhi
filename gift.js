@@ -5,10 +5,14 @@ bgm.loop = true;
 bgm.volume = 0.45; // adjust loudness
 
 const memes = [
-  "https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif",
-  "https://media.giphy.com/media/l3vR85PnGsBwu1PFK/giphy.gif",
-  "https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif",
-  "https://media.giphy.com/media/3o6ZsQFq0ZHSs4cM7a/giphy.gif",
+  "image/adorable-cute.gif",
+  "image/icegif-191.gif",
+  "image/image.png",
+  "image/love.gif",
+  "image/tenor.gif",
+  "image/5ea9969298974d0168463d6cd2642374.gif",
+  "image/a01e1414b6628df4c8fa76da33a37c35.gif",
+  "image/tenor (1).gif",
 ];
 
 // const friendMessages = [
@@ -39,27 +43,42 @@ const memes = [
 // ];
 
 const photos = [
-  { src: "img/photo1.jpg", caption: "That crazy trip we took" },
-  { src: "img/photo2.jpg", caption: "Late night laughs — unforgettable" },
-  { src: "img/photo3.jpg", caption: "Our silly selfie moment" },
-  { src: "img/photo4.jpg", caption: "When everything went right" },
-  { src: "img/photo5.jpg", caption: "One of my favorite days with you" },
+  {
+    src: "picture/7d685178-8d37-4ba5-a88b-ef71c0bf6e37.png",
+    caption: "1st pic you shared to me 🤌🫶",
+  },
+  {
+    src: "picture/02140ca8-319b-4bf4-83f6-68b8cf18bfbe.png",
+    caption: "my LOVE💕",
+  },
+  {
+    src: "picture/a9f19f15-fe55-4c47-a6d6-294b5f49fafa.png",
+    caption: "Cutie 😍",
+  },
+  {
+    src: "picture/b706d3d0-0a29-4ae4-b67c-c7c88d320d49.png",
+    caption: "Meri Jaaneman",
+  },
+  {
+    src: "picture/ChatGPT Image Aug 11, 2025, 09_21_49 PM.png",
+    caption: "Mine FOREVER 😽😻😽",
+  },
 ];
 
-const poemText = `A tiny light on a quiet night,
-You bloom and make the world more bright.
-Laughter follows wherever you roam,
-May warmth and wonder lead you home.`;
+const poemText = `तेरी हँसी में खिले हैं मेरे मौसम के सारे फूल,
+तेरी नज़र से ही मिलता है दिल को अपना उसूल,
+थाम ले हाथ मेरा, चलें ख़्वाबों की उस राह पर,
+जहाँ तू हो, मैं रहूँ—और बाकी दुनिया सब फ़ज़ूल।`;
 
-const letterText = `Dear Friend,
+const letterText = `Dear Jaan,
 
-On this special day I wanted to tell you how much you mean to me.
-You've been a companion, a partner-in-crime, and the kindest heart.
-Thank you for every memory — the silly, the deep, the loud laughs.
-I hope this year gives you everything you dream of and more.
+Tere special din pe bas yeh kehna hai ki tu meri zindagi ka sabse khoobsurat hissa hai.
+Tu meri muskaan, mera safe place, aur meri sabse pyaari adventure rahi hai.
+Har smile, har hug, aur har moment ke liye dil se thanks.
+Is saal tujhe woh saari khushiyan milein jo tune mujhe di hain — aur bhi zyada.
 
-Always with warmth,
-— Your friend`;
+Hamesha tera,
+— Badal ❤️`;
 
 /* ========= Confetti & Emoji FX ========= */
 const EMOJIS = ["🎉", "🎊", "✨", "💖", "🎈", "🧁", "⭐"];
