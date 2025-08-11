@@ -72,10 +72,10 @@ const poemText = `तेरी हँसी में खिले हैं म
 
 const letterText = `Dear Jaan,
 
-Tere special din pe bas yeh kehna hai ki tu meri zindagi ka sabse khoobsurat hissa hai.
-Tu meri muskaan, mera safe place, aur meri sabse pyaari adventure rahi hai.
+Tumhare special din pe bas yeh kehna hai ki tum meri zindagi ka sabse khoobsurat hissa ho.
+Tum meri muskaan, mera safe place, aur meri sabse pyaari adventure ho.
 Har smile, har hug, aur har moment ke liye dil se thanks.
-Is saal tujhe woh saari khushiyan milein jo tune mujhe di hain — aur bhi zyada.
+Is saal tumhe woh saari khushiyan milein jo tumne mujhe di hain — aur bhi zyada.
 
 Hamesha tera,
 — Badal ❤️`;
@@ -218,7 +218,7 @@ function startGallery() {
       imgEl.style.opacity = 1;
       spawnConfettiBurst(window.innerWidth / 2, 120, 22);
     }, 520);
-  }, 3300);
+  }, 2000);
 }
 function stopGallery() {
   clearInterval(galleryInterval);
