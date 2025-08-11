@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Happy Birthday Countdown</title>
+
+    <style>
+      :root {
+        --bg: #0f0f14;
+        --card: #171a27;
+        --text: #f7f7fb;
+        --muted: #b7b7c9;
+        --accent: #ff6b9e;
+        --accent2: #7cf6d7;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        background: radial-gradient(
+          1200px 1200px at 50% -200px,
+          #1c2034,
+          #0f0f14
+        );
+        color: var(--text);
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, sans-serif;
+        overflow: hidden;
+      }
+      .center-wrap {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 28px 24px;
+        max-width: 780px;
+        width: 100%;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+      h1.title {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        margin: 0 0 10px;
+        color: var(--accent);
+      }
+      .muted {
+        color: var(--muted);
+        margin: 0 0 18px;
+      }
+      .countdown {
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 6px 0 10px;
+      }
+      .timebox {
+        min-width: 110px;
+        background: #141826;
+        border: 1px solid #262b45;
+        border-radius: 14px;
+        padding: 14px;
+      }
+      .num {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: var(--accent2);
+      }
+      .label {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+      .big-time {
+        font-size: clamp(2.2rem, 8vw, 4rem);
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #eaf9ff;
+      }
+      .actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      button,
+      .btn {
+        appearance: none;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--accent), #ffa6c1);
+        color: #0b0b0f;
+      }
+      .ghost {
+        background: #23273a;
+        color: var(--text);
+        border: 1px solid #2d3250;
+      }
+      /* Birthday state */
+      .happy {
+        font-size: clamp(2.2rem, 7vw, 4.2rem);
+        font-weight: 900;
+        margin: 6px 0 10px;
+        background: linear-gradient(135deg, #ffd166, #ff6b9e 40%, #7cf6d7 80%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .subtitle {
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      /* Emoji confetti */
+      #confetti-container {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 10;
+      }
+      .confetti {
+        position: absolute;
+        top: -2.5rem;
+        font-size: 1.8rem;
+        animation: fall linear var(--dur) forwards;
+        transform: translateY(-100%);
+        will-change: transform;
+      }
+      @keyframes fall {
+        0% {
+          transform: translate3d(var(--x, 0), -10%, 0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate3d(var(--x-end, 0), 110vh, 0) rotate(720deg);
+          opacity: 0.95;
+        }
+      }
+      /* Fallback play prompt */
+      .notice {
+        margin-top: 8px;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+
+      .gift-box {
+        font-size: 2rem;
+        background: linear-gradient(135deg, gold, orange);
+        border: none;
+        border-radius: 12px;
+        padding: 16px 20px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .gift-box:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="confetti-container" aria-hidden="true"></div>
+
+    <div class="center-wrap">
+      <div class="card" id="app">
+        <h1 class="title">Countdown to Midnight</h1>
+        <p class="muted">We’re counting down to 00:00 for the big surprise.</p>
+
+        <!-- Big centered countdown -->
+        <div id="bigTime" class="big-time">00:00:00</div>
+
+        <!-- Optional segmented boxes -->
+        <div class="countdown" aria-live="polite" role="timer">
+          <div class="timebox">
+            <div class="num" id="d">0</div>
+            <div class="label">Days</div>
+          </div>
+          <div class="timebox">
+            <div class="num" id="h">0</div>
+            <div class="label">Hours</div>
+          </div>
+          <div class="timebox">
+            <div class="num" id="m">0</div>
+            <div class="label">Minutes</div>
+          </div>
+          <div class="timebox">
+            <div class="num" id="s">0</div>
+            <div class="label">Seconds</div>
+          </div>
+        </div>
+
+        <p id="autoplayNote" class="notice" hidden>
+          Tip: If music didn’t start, tap “Play Music” once (browser autoplay
+          rules).
+        </p>
+      </div>
+    </div>
+
+    <!-- Hidden birthday state template -->
+    <template id="birthdayTemplate">
+      <div class="card">
+        <div class="happy">Happy Birthday!</div>
+        <h1>🎂🎉</h1>
+        <p class="subtitle">
+          Wishing you a day filled with love, laughter, and sweet surprises.
+        </p>
+        <div class="actions">
+          <button id="giftBtn" class="gift-box" aria-label="Open your gift">
+            🎁
+          </button>
+        </div>
+      </div>
+    </template>
+
+    <!-- Audio -->
+    <audio
+      id="musicBefore"
+      src="audio/Khudaya Khair-320kbps.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="musicOnTime"
+      src="audio/tum_ho_mera_pyar_haunted_full_song_lyrical_video__kk_suzanne_dmello.mp3"
+      preload="auto"
+    ></audio>
+    <audio
+      id="musicAfter"
+      src="audio/Jaadugar - SirfJatt.Com.mp3"
+      preload="auto"
+    ></audio>
+
+    <script src="index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Birthday Gift — Surprise</title>
+    <style>
+      :root {
+        --bg1: #fff0f7;
+        --accent-pink: #ff9bbd;
+        --accent-pink-2: #ffc4d6;
+        --muted: #6b6b78;
+        --card: #ffffffcc;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: linear-gradient(180deg, #fff6fb 0%, #fff0f5 100%);
+        color: #222;
+        overflow-x: hidden;
+      }
+
+      /* page layout */
+      .wrap {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+      }
+      .stage {
+        width: 100%;
+        max-width: 1000px;
+        min-height: 70vh;
+        margin: 0 auto;
+        padding: 28px;
+        border-radius: 20px;
+        background: var(--card);
+        box-shadow: 0 10px 40px rgba(12, 12, 20, 0.08);
+        position: relative;
+        overflow: hidden;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+      }
+      .stage.active {
+        display: flex;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 1.8rem;
+        color: #222;
+      }
+      p.lead {
+        color: var(--muted);
+        margin: 6px 0 16px;
+      }
+
+      /* Cute Next Button */
+      .next-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 22px;
+        font-weight: 800;
+        border-radius: 999px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        font-size: 1.05rem;
+        background: linear-gradient(
+          135deg,
+          var(--accent-pink),
+          var(--accent-pink-2)
+        );
+        box-shadow: 0 8px 30px rgba(255, 155, 189, 0.35);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+        position: relative;
+        z-index: 20;
+        animation: pulseGlow 1.6s infinite alternate;
+      }
+      .next-btn:hover {
+        transform: scale(1.05) rotate(-2deg);
+      }
+      @keyframes pulseGlow {
+        0% {
+          box-shadow: 0 8px 18px rgba(255, 155, 189, 0.35);
+        }
+        100% {
+          box-shadow: 0 16px 36px rgba(255, 155, 189, 0.55);
+        }
+      }
+      /* click sparkle */
+      .sparkle {
+        position: absolute;
+        pointer-events: none;
+        transform: translate(-50%, -50%) scale(0.9);
+        animation: sparkle 0.7s ease forwards;
+        font-size: 18px;
+        z-index: 30;
+      }
+      @keyframes sparkle {
+        0% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(0.6) translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, -120%) scale(1.6);
+        }
+      }
+
+      /* Stage 1: Meme Explosion */
+      .meme {
+        position: absolute;
+        width: 160px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        transform-origin: center;
+        animation: pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      }
+      @keyframes pop {
+        from {
+          transform: scale(0.2) rotate(-12deg);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1) rotate(0);
+          opacity: 1;
+        }
+      }
+      .confetti-soft {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 5;
+      }
+
+      /* Stage 2: Messages from Friends */
+      #messages-container {
+        width: 100%;
+        max-width: 760px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      .msg {
+        width: 100%;
+        background: linear-gradient(180deg, #fff, #fff3f8);
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: 0 8px 24px rgba(20, 20, 30, 0.06);
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        animation: showMsg 0.8s forwards;
+      }
+      @keyframes showMsg {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ffdbe6, #ffb6d0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        color: #7a084a;
+        flex-shrink: 0;
+      }
+      .msg .who {
+        font-weight: 800;
+        color: #8b2b4a;
+      }
+      .msg .text {
+        color: #333;
+        margin-top: 4px;
+      }
+
+      /* Stage 3: Memory Gallery */
+      .gallery-wrap {
+        width: 100%;
+        max-width: 880px;
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+      .gallery-img {
+        width: 100%;
+        display: block;
+        object-fit: cover;
+        height: 520px;
+        transition: opacity 0.9s ease;
+      }
+      .gallery-caption {
+        padding: 12px 16px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(255, 255, 255, 0.95)
+        );
+        font-weight: 700;
+        color: #6b2b4a;
+      }
+
+      /* Stage 4A: Poem */
+      .poem-box {
+        max-width: 800px;
+        padding: 26px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, #fff6fb, #fff0f5);
+        box-shadow: 0 12px 40px rgba(150, 60, 120, 0.06);
+        text-align: center;
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+      .petal {
+        position: absolute;
+        font-size: 20px;
+        opacity: 0.95;
+        animation: floatPetal linear infinite;
+        pointer-events: none;
+      }
+      @keyframes floatPetal {
+        from {
+          transform: translateY(0) rotate(0);
+        }
+        to {
+          transform: translateY(-110vh) rotate(360deg);
+        }
+      }
+
+      /* Stage 4B: Letter */
+      .letter-wrap {
+        max-width: 760px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .sealed {
+        width: 180px;
+        height: 120px;
+        border-radius: 12px;
+        background: linear-gradient(180deg, #ffecf3, #ffdfe9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+      .seal {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #b2185b, #7a0b38);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 900;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      }
+      .paper {
+        width: 90%;
+        max-width: 680px;
+        background: #fffaf4;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        transform-origin: top center;
+        transform: scaleY(0);
+        opacity: 0;
+        transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 0.4s ease 0.05s;
+        font-family: "Georgia", serif;
+        white-space: pre-wrap;
+        color: #2b1a1a;
+      }
+      .paper.open {
+        transform: scaleY(1);
+        opacity: 1;
+      }
+
+      .typewriter {
+        overflow: hidden;
+        border-right: 0.12em solid rgba(200, 100, 140, 0.9);
+        white-space: pre-wrap;
+        font-family: "Courier New", monospace;
+        font-size: 1rem;
+      }
+
+      /* Stage 5: Musical Surprise */
+      .music-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .balloon {
+        position: absolute;
+        font-size: 26px;
+        animation: rise linear infinite;
+        pointer-events: none;
+      }
+      @keyframes rise {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-120vh);
+        }
+      }
+
+      /* utilities */
+      .center-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 18px;
+      }
+      .hidden {
+        display: none !important;
+      }
+      footer {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      @media (max-width: 720px) {
+        .gallery-img {
+          height: 320px;
+        }
+        .poem-box {
+          font-size: 1rem;
+          padding: 18px;
+        }
+        .meme {
+          width: 120px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <!-- Stage containers -->
+      <div id="st1" class="stage active" aria-hidden="false">
+        <h1>🎁HAPPY BIRTHDAY💖</h1>
+        <p>💕may this day be as special as you are💕</p>
+        <br />
+        <div class="confetti-soft" aria-hidden="true" id="confetti-soft"></div>
+        <div style="margin-top: 18px">
+          <button class="next-btn" id="nextBtn1">🎁 Next Surprise</button>
+        </div>
+      </div>
+
+      <!-- <div id="st2" class="stage" aria-hidden="true">
+        <h1>💌Wishes from Friends😍</h1>
+        <p class="lead">Some warm wishes from people who care 💖</p>
+        <div id="messages-container"></div>
+        <div class="center-row">
+          <button class="next-btn" id="nextBtn2">🎁 Next Surprise</button>
+        </div>
+      </div> -->
+
+      <div id="st2" class="stage" aria-hidden="true">
+        <h1>📸 Memory Gallery</h1>
+        <p class="lead">A slideshow of favorite memories</p>
+        <div class="gallery-wrap" id="galleryWrap">
+          <img
+            id="galleryImg"
+            class="gallery-img"
+            src="img/photo1.jpg"
+            alt="memory photo"
+          />
+          <div class="gallery-caption" id="galleryCaption">
+            Memory caption here
+          </div>
+        </div>
+        <div class="center-row">
+          <button class="next-btn" id="nextBtn2">🎁 Next Surprise</button>
+        </div>
+      </div>
+
+      <div id="st3" class="stage" aria-hidden="true">
+        <h1>📜 Poem</h1>
+        <p class="lead">A little poem — gentle reveal</p>
+        <div class="poem-box" id="poemBox">
+          <!-- poem text inserted by JS -->
+        </div>
+        <div class="center-row">
+          <button class="next-btn" id="nextBtn3">🎁 Next Surprise</button>
+        </div>
+      </div>
+
+      <div id="st4" class="stage" aria-hidden="true">
+        <h1>✉️ Personal Letter</h1>
+        <p class="lead">A letter sealed with warmth</p>
+        <div class="letter-wrap">
+          <div class="sealed" id="sealBtn" title="Click to open the letter">
+            <div class="seal">♥</div>
+          </div>
+          <div id="paper" class="paper" aria-hidden="true"></div>
+        </div>
+        <div class="center-row">
+          <button class="next-btn hidden" id="nextBtn4">END 🎁</button>
+        </div>
+      </div>
+
+      <div id="st6" class="stage" aria-hidden="true">
+        <h1>🎁HAPPY BIRTHDAY💖</h1>
+        <p>MY DARLING</p>
+        <h2>LOVE YOU FOREVER</h2>
+      </div>
+    </div>
+
+    <footer style="text-align: center">
+      Tip: If audio doesn't start automatically, tap the play button.
+    </footer>
+
+    <!-- audio placeholders -->
+
+    <audio id="bgmSong" src="audio/ishq_wala.mp3" preload="auto"></audio>
+
+    <script src="gift.js"></script>
+  </body>
+</html>
