@@ -107,7 +107,7 @@ function renderCountdown(diffMs) {
       form.reset();
       updateCounter();
       noteEl.hidden = false;
-      noteEl.textContent = "Thanks! Your wish is saved for the gift page 💖";
+      noteEl.textContent = "Thanks! Your wish is saved 💖";
       submitBtn.textContent = "Sent ✅";
       setTimeout(() => {
         submitBtn.textContent = "Send Wish 💌";

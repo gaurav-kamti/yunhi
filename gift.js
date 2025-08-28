@@ -219,7 +219,7 @@ async function startMessagesStage() {
       </div>`;
     container.appendChild(msg);
     i++;
-    setTimeout(nextMsg, 1200 + Math.random() * 900);
+    setTimeout(nextMsg, 1200 + Math.random() * 700);
   }
   nextMsg();
 }
