@@ -1,4 +1,4 @@
-const TARGET = new Date("2025-08-28T13:45:00");
+const TARGET = new Date("2025-08-28T13:57:00");
 const ONTIME_DURATION = 30 * 1000;
 
 const musicBefore = document.getElementById("musicBefore");
