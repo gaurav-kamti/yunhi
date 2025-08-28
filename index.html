@@ -171,6 +171,32 @@
     </style>
   </head>
   <body>
+    <div
+      id="overlay"
+      style="
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      "
+    >
+      <span
+        style="
+          color: white;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-align: center;
+        "
+      >
+        <h2>TAP</h2>
+        <h4>to get in</h4>
+      </span>
+    </div>
+
     <div id="confetti-container" aria-hidden="true"></div>
 
     <div class="center-wrap">
@@ -200,11 +226,49 @@
             <div class="label">Seconds</div>
           </div>
         </div>
+        <!-- Friends Message Form -->
+        <form id="guestbookForm" style="margin: 12px 0 18px; text-align: left">
+          <div style="display: grid; gap: 8px">
+            <input
+              id="guestName"
+              type="text"
+              placeholder="Your name"
+              required
+              maxlength="40"
+              style="
+                padding: 10px;
+                border-radius: 10px;
+                border: 1px solid #2d3250;
+                background: #141826;
+                color: #eaf9ff;
+              "
+            />
 
-        <p id="autoplayNote" class="notice" hidden>
-          Tip: If music didn’t start, tap “Play Music” once (browser autoplay
-          rules).
-        </p>
+            <textarea
+              id="guestMessage"
+              placeholder="Your message (max 15 words)"
+              required
+              rows="2"
+              style="
+                padding: 10px;
+                border-radius: 10px;
+                border: 1px solid #2d3250;
+                background: #141826;
+                color: #eaf9ff;
+                resize: vertical;
+              "
+            ></textarea>
+
+            <div class="muted" id="wordHelp">0 / 15 words</div>
+
+            <button type="submit" class="btn" id="guestSubmit">
+              Send Wish 💌
+            </button>
+            <div class="muted" id="guestNote" hidden>
+              Thanks! Your wish is saved.
+            </div>
+          </div>
+        </form>
       </div>
     </div>
 

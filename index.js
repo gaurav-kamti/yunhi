@@ -1,4 +1,4 @@
-const TARGET = new Date("2025-08-15T00:00:00");
+const TARGET = new Date("2025-08-28T13:45:00");
 const ONTIME_DURATION = 30 * 1000;
 
 const musicBefore = document.getElementById("musicBefore");
@@ -27,6 +27,14 @@ function primeAudioOnGesture() {
   window.removeEventListener("click", primeAudioOnGesture);
   window.removeEventListener("touchend", primeAudioOnGesture);
 }
+
+const overlay = document.getElementById("overlay");
+
+overlay.addEventListener("click", () => {
+  // Remove overlay
+  overlay.remove();
+});
+
 window.addEventListener("click", primeAudioOnGesture);
 window.addEventListener("touchend", primeAudioOnGesture);
 
@@ -49,6 +57,71 @@ function renderCountdown(diffMs) {
     mins
   )}:${pad(secs)}`;
 }
+
+// --- 15-word counter + submit to Netlify Function ---
+(function () {
+  const form = document.getElementById("guestbookForm");
+  if (!form) return;
+
+  const nameEl = document.getElementById("guestName");
+  const msgEl = document.getElementById("guestMessage");
+  const helpEl = document.getElementById("wordHelp");
+  const submitBtn = document.getElementById("guestSubmit");
+  const noteEl = document.getElementById("guestNote");
+
+  function countWords(s) {
+    return s.trim().split(/\s+/).filter(Boolean).length;
+  }
+
+  function updateCounter() {
+    const wc = countWords(msgEl.value);
+    helpEl.textContent = `${wc} / 15 words`;
+    helpEl.style.color = wc > 15 ? "#ff6b9e" : "var(--muted)";
+    submitBtn.disabled = wc === 0 || wc > 15;
+  }
+
+  msgEl.addEventListener("input", updateCounter);
+  updateCounter();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = nameEl.value.trim();
+    const message = msgEl.value.trim();
+    if (!name || !message) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
+
+    try {
+      const res = await fetch("/.netlify/functions/saveMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to send");
+      }
+
+      form.reset();
+      updateCounter();
+      noteEl.hidden = false;
+      noteEl.textContent = "Thanks! Your wish is saved for the gift page 💖";
+      submitBtn.textContent = "Sent ✅";
+      setTimeout(() => {
+        submitBtn.textContent = "Send Wish 💌";
+        submitBtn.disabled = false;
+      }, 1500);
+    } catch (err) {
+      noteEl.hidden = false;
+      noteEl.textContent = "Couldn’t send. Please try again.";
+      submitBtn.textContent = "Send Wish 💌";
+      submitBtn.disabled = false;
+      console.error(err);
+    }
+  });
+})();
 
 // ===== MUSIC CONTROL =====
 function startBeforeMusic() {

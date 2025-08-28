@@ -15,32 +15,32 @@ const memes = [
   "image/tenor (1).gif",
 ];
 
-// const friendMessages = [
-//   {
-//     name: "Aarav",
-//     text: "Happy birthday! You light up every room — keep shining ✨",
-//   },
-//   {
-//     name: "Meera",
-//     text: "Hope this year brings you all the laughter and cake 🍰",
-//   },
-//   {
-//     name: "Rohan",
-//     text: "To more game nights and late chats — love you bro! 🥳",
-//   },
-//   {
-//     name: "Tara",
-//     text: "Your kindness inspires me. Have a magical birthday 💖",
-//   },
-//   {
-//     name: "Kabir",
-//     text: "Another year of epic memories — let's make more soon! 🚀",
-//   },
-//   {
-//     name: "Nisha",
-//     text: "You deserve the whole world. Happiest of birthdays! 🌟",
-//   },
-// ];
+const friendMessages = [
+  {
+    name: "Aarav",
+    text: "Happy birthday! You light up every room — keep shining ✨",
+  },
+  {
+    name: "Meera",
+    text: "Hope this year brings you all the laughter and cake 🍰",
+  },
+  {
+    name: "Rohan",
+    text: "To more game nights and late chats — love you bro! 🥳",
+  },
+  {
+    name: "Tara",
+    text: "Your kindness inspires me. Have a magical birthday 💖",
+  },
+  {
+    name: "Kabir",
+    text: "Another year of epic memories — let's make more soon! 🚀",
+  },
+  {
+    name: "Nisha",
+    text: "You deserve the whole world. Happiest of birthdays! 🌟",
+  },
+];
 
 const photos = [
   {
@@ -110,7 +110,7 @@ function spawnConfettiBurst(x, y, count = 18) {
 
 /* ========= Stage Management ========= */
 let currentStage = 1;
-const totalStages = 5;
+const totalStages = 6;
 
 function showStage(n) {
   for (let i = 1; i <= totalStages; i++) {
@@ -148,6 +148,23 @@ function cuteClickSpark(btn) {
   }
 }
 
+async function fetchRemoteMessages() {
+  try {
+    const res = await fetch("/.netlify/functions/getMessages");
+    if (!res.ok) throw new Error("Network error");
+    const data = await res.json();
+    // Map to your display shape
+    return data.map((d) => ({
+      name: d.name,
+      text: d.message,
+      createdAt: d.createdAt,
+    }));
+  } catch (e) {
+    console.warn("Unable to fetch remote messages:", e);
+    return [];
+  }
+}
+
 /* ---- Stage 1: Meme Explosion ---- */
 let memeInterval = null;
 function startMemeStage() {
@@ -173,31 +190,39 @@ function stopMemeStage() {
   clearInterval(memeInterval);
 }
 
-// /* ---- Stage 2: Messages ---- */
-// function startMessagesStage() {
-//   const container = document.getElementById("messages-container");
-//   container.innerHTML = "";
-//   let i = 0;
-//   function nextMsg() {
-//     if (currentStage !== 2) return;
-//     if (i >= friendMessages.length) {
-//       spawnConfettiBurst(window.innerWidth / 2, 150, 28);
-//       return;
-//     }
-//     const m = friendMessages[i];
-//     const msg = document.createElement("div");
-//     msg.className = "msg";
-//     msg.innerHTML = `<div class="avatar">${m.name.charAt(0)}</div>
-//                      <div style="flex:1">
-//                        <div class="who">${m.name}</div>
-//                        <div class="text">${m.text}</div>
-//                      </div>`;
-//     container.appendChild(msg);
-//     i++;
-//     setTimeout(nextMsg, 1200 + Math.random() * 900);
-//   }
-//   nextMsg();
-// }
+/* ---- Stage 2: Messages ---- */
+async function startMessagesStage() {
+  const container = document.getElementById("messages-container");
+  container.innerHTML = "";
+
+  // pull remote, or fall back to local list
+  let messages = await fetchRemoteMessages();
+  if (!messages.length) {
+    messages = friendMessages; // your defaults
+  }
+
+  let i = 0;
+  function nextMsg() {
+    if (currentStage !== 2) return;
+    if (i >= messages.length) {
+      spawnConfettiBurst(window.innerWidth / 2, 150, 28);
+      return;
+    }
+    const m = messages[i];
+    const msg = document.createElement("div");
+    msg.className = "msg";
+    msg.innerHTML = `
+      <div class="avatar">${(m.name || "?").charAt(0).toUpperCase()}</div>
+      <div style="flex:1">
+        <div class="who">${m.name || "Friend"}</div>
+        <div class="text">${m.text}</div>
+      </div>`;
+    container.appendChild(msg);
+    i++;
+    setTimeout(nextMsg, 1200 + Math.random() * 900);
+  }
+  nextMsg();
+}
 
 /* ---- Stage 3: Memory Gallery ---- */
 let galleryInterval = null;
@@ -209,7 +234,7 @@ function startGallery() {
   capEl.textContent = photos[0].caption;
   galleryIndex = 0;
   galleryInterval = setInterval(() => {
-    if (currentStage !== 2) return;
+    if (currentStage !== 3) return;
     galleryIndex = (galleryIndex + 1) % photos.length;
     imgEl.style.opacity = 0;
     setTimeout(() => {
@@ -259,13 +284,13 @@ function bindSeal() {
       paper.appendChild(el);
       let i = 0;
       function type() {
-        if (currentStage !== 4) return;
+        if (currentStage !== 5) return;
         if (i < letterText.length) {
           el.textContent += letterText.charAt(i);
           i++;
           typingTimer = setTimeout(type, 32 + Math.random() * 22);
         } else {
-          document.getElementById("nextBtn4").classList.remove("hidden");
+          document.getElementById("nextBtn5").classList.remove("hidden");
         }
       }
       setTimeout(type, 220);
@@ -276,23 +301,30 @@ function bindSeal() {
 
 function spawnBalloonLoop() {
   setInterval(() => {
-    if (currentStage === 5) spawnBalloon();
+    if (currentStage === 6) spawnBalloon();
   }, 600);
 }
 
 /* ---- Navigation ---- */
 function goToNext() {
   cuteClickSpark(document.querySelector(".next-btn"));
+
+  // cleanup current stage
   if (currentStage === 1) stopMemeStage();
-  if (currentStage === 2) stopGallery();
-  if (currentStage === 4) clearTimeout(typingTimer);
+  if (currentStage === 3) stopGallery();
+  if (currentStage === 5) clearTimeout(typingTimer);
+
+  // move forward
   const next = Math.min(totalStages, currentStage + 1);
   showStage(next);
 
-  if (next === 2) startGallery(); // gallery is now stage 2
-  if (next === 3) showPoem(); // poem is now stage 3
-  if (next === 4) bindSeal(); // letter is now stage 4
-  if (next === 5) spawnBalloonLoop(); // balloons is now stage 5
+  // activate the new stage
+  if (next === 1) startMemeStage();
+  if (next === 2) startMessagesStage();
+  if (next === 3) startGallery();
+  if (next === 4) showPoem();
+  if (next === 5) bindSeal();
+  if (next === 6) spawnBalloonLoop();
 }
 
 /* ---- Event Bindings ---- */
@@ -300,6 +332,7 @@ document.getElementById("nextBtn1").addEventListener("click", goToNext);
 document.getElementById("nextBtn2").addEventListener("click", goToNext);
 document.getElementById("nextBtn3").addEventListener("click", goToNext);
 document.getElementById("nextBtn4").addEventListener("click", goToNext);
+document.getElementById("nextBtn5").addEventListener("click", goToNext);
 
 document.querySelectorAll(".next-btn").forEach((btn) => {
   btn.addEventListener("click", () => cuteClickSpark(btn));
