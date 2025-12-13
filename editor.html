@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Website Editor</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        input:focus, textarea:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .file-input {
+            padding: 5px;
+        }
+        
+        .preview-grid {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .preview-item {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+        
+        .friend-input {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .friend-input input,
+        .friend-input textarea {
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .result h2 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+        
+        .link-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 10px;
+        }
+        
+        .link-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎂 Birthday Website Editor</h1>
+        <p class="subtitle">Customize your birthday countdown website with all features!</p>
+        
+        <div class="section">
+            <div class="section-title">📝 Basic Information</div>
+            <div class="form-group">
+                <label>Birthday Person's Name:</label>
+                <input type="text" id="recipientName" placeholder="e.g., Tulip" value="Tulip">
+            </div>
+            <div class="form-group">
+                <label>Birthday Date & Time:</label>
+                <input type="datetime-local" id="birthdayDate" value="2025-12-25T00:00">
+            </div>
+            <div class="form-group">
+                <label>Your Name (From):</label>
+                <input type="text" id="creatorName" placeholder="e.g., Badal" value="Badal">
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">🎵 Music (3 Stages)</div>
+            <div class="form-group">
+                <label>Music Before Birthday:</label>
+                <input type="file" id="musicBefore" accept="audio/*" class="file-input">
+            </div>
+            <div class="form-group">
+                <label>Music On Time (Birthday Moment):</label>
+                <input type="file" id="musicOnTime" accept="audio/*" class="file-input">
+            </div>
+            <div class="form-group">
+                <label>Music After (Gift Page):</label>
+                <input type="file" id="musicAfter" accept="audio/*" class="file-input">
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">📸 Photos for Gallery</div>
+            <input type="file" id="photos" multiple accept="image/*" class="file-input">
+            <div id="photoPreview" class="preview-grid"></div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">🖼️ Memes/GIFs for Stage 1</div>
+            <input type="file" id="memes" multiple accept="image/*" class="file-input">
+            <div id="memePreview" class="preview-grid"></div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">💌 Personal Messages</div>
+            <div class="form-group">
+                <label>Poem:</label>
+                <textarea id="poem" placeholder="Write a beautiful poem...">तेरी हँसी में खिले हैं मेरे मौसम के सारे फूल,
+तेरी नज़र से ही मिलता है दिल को अपना उसूल,
+थाम ले हाथ मेरा, चलें ख़्वाबों की उस राह पर,
+जहाँ तू हो, मैं रहूँ—और बाकी दुनिया सब फ़ज़ूल।</textarea>
+            </div>
+            <div class="form-group">
+                <label>Personal Letter:</label>
+                <textarea id="letter" placeholder="Write a heartfelt letter...">Dear Jaan,
+
+Tumhare special din pe bas yeh kehna hai ki tum meri zindagi ka sabse khoobsurat hissa ho.
+Tum meri muskaan, mera safe place, aur meri sabse pyaari adventure ho.
+Har smile, har hug, aur har moment ke liye dil se thanks.
+Is saal tumhe woh saari khushiyan milein jo tumne mujhe di hain — aur bhi zyada.
+
+Hamesha tera,
+— Badal ❤️</textarea>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">👥 Friends' Messages</div>
+            <div id="friendsContainer">
+                <div class="friend-input">
+                    <input type="text" placeholder="Friend's Name" class="friend-name" value="Aarav">
+                    <textarea placeholder="Their message..." class="friend-message">Happy birthday! You light up every room — keep shining ✨</textarea>
+                    <button class="btn btn-danger" onclick="removeFriend(0)">Remove</button>
+                </div>
+            </div>
+            <button class="btn btn-secondary" onclick="addFriend()">+ Add Friend Message</button>
+        </div>
+        
+        <button class="btn btn-primary" onclick="generateWebsite()">
+            🎁 Generate Birthday Website
+        </button>
+        
+        <div id="result" class="result">
+            <h2>🎉 Your Birthday Website is Ready!</h2>
+            <p>Click the button below to open your customized birthday website:</p>
+            <a href="#" class="link-btn" id="openLink" onclick="openWebsite(); return false;">
+                🌐 Open Birthday Website
+            </a>
+            <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                The website will open in a new window. You can bookmark it or share it!
+            </p>
+        </div>
+    </div>
+
+    <script src="editor.js"></script>
+</body>
+</html>
