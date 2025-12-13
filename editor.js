@@ -41,37 +41,133 @@ document.getElementById('musicAfter').addEventListener('change', async (e) => {
 
 // Handle photo uploads
 document.getElementById('photos').addEventListener('change', async (e) => {
-    uploadedFiles.photos = [];
+    const preview = document.getElementById('photoPreview');
+    
+    for (let file of e.target.files) {
+        const base64 = await fileToBase64(file);
+        const index = uploadedFiles.photos.length;
+        uploadedFiles.photos.push(base64);
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-wrapper';
+        wrapper.dataset.index = index;
+        
+        const img = document.createElement('img');
+        img.src = base64;
+        img.className = 'preview-item';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removePhoto(index);
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        preview.appendChild(wrapper);
+    }
+    
+    // Clear the input so same file can be selected again
+    e.target.value = '';
+});
+
+function removePhoto(index) {
+    uploadedFiles.photos.splice(index, 1);
+    renderPhotoPreviews();
+}
+
+function renderPhotoPreviews() {
     const preview = document.getElementById('photoPreview');
     preview.innerHTML = '';
     
-    for (let file of e.target.files) {
-        const base64 = await fileToBase64(file);
-        uploadedFiles.photos.push(base64);
+    if (uploadedFiles.photos.length === 0) {
+        preview.innerHTML = '<div class="empty-state">No photos uploaded yet 📷</div>';
+        return;
+    }
+    
+    uploadedFiles.photos.forEach((base64, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-wrapper';
+        wrapper.dataset.index = index;
         
         const img = document.createElement('img');
         img.src = base64;
         img.className = 'preview-item';
-        preview.appendChild(img);
-    }
-});
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removePhoto(index);
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        preview.appendChild(wrapper);
+    });
+}
 
 // Handle meme uploads
 document.getElementById('memes').addEventListener('change', async (e) => {
-    uploadedFiles.memes = [];
     const preview = document.getElementById('memePreview');
-    preview.innerHTML = '';
     
     for (let file of e.target.files) {
         const base64 = await fileToBase64(file);
+        const index = uploadedFiles.memes.length;
         uploadedFiles.memes.push(base64);
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-wrapper';
+        wrapper.dataset.index = index;
         
         const img = document.createElement('img');
         img.src = base64;
         img.className = 'preview-item';
-        preview.appendChild(img);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removeMeme(index);
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        preview.appendChild(wrapper);
     }
+    
+    // Clear the input so same file can be selected again
+    e.target.value = '';
 });
+
+function removeMeme(index) {
+    uploadedFiles.memes.splice(index, 1);
+    renderMemePreviews();
+}
+
+function renderMemePreviews() {
+    const preview = document.getElementById('memePreview');
+    preview.innerHTML = '';
+    
+    if (uploadedFiles.memes.length === 0) {
+        preview.innerHTML = '<div class="empty-state">No memes uploaded yet 🎉</div>';
+        return;
+    }
+    
+    uploadedFiles.memes.forEach((base64, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'preview-wrapper';
+        wrapper.dataset.index = index;
+        
+        const img = document.createElement('img');
+        img.src = base64;
+        img.className = 'preview-item';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = () => removeMeme(index);
+        
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        preview.appendChild(wrapper);
+    });
+}
 
 // Friend message management
 function addFriend() {
@@ -80,7 +176,8 @@ function addFriend() {
     
     const div = document.createElement('div');
     div.className = 'friend-input';
-    div.innerHTML = '<input type="text" placeholder="Friend\'s Name" class="friend-name">' +
+    div.innerHTML = '<div class="friend-number">' + (index + 1) + '</div>' +
+                    '<input type="text" placeholder="Friend\'s Name" class="friend-name">' +
                     '<textarea placeholder="Their message..." class="friend-message"></textarea>' +
                     '<button class="btn btn-danger" onclick="removeFriend(' + index + ')">Remove</button>';
     
