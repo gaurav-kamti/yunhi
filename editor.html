@@ -266,9 +266,14 @@ Hamesha tera,
             <button class="btn btn-secondary" onclick="addFriend()">+ Add Friend Message</button>
         </div>
         
-        <button class="btn btn-primary" onclick="generateWebsite()">
-            🎁 Generate Birthday Website
-        </button>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="generateWebsite()" style="flex: 1; min-width: 200px;">
+                🎁 Generate Birthday Website
+            </button>
+            <button class="btn btn-primary" onclick="showPreview()" style="flex: 1; min-width: 200px; background: linear-gradient(135deg, #28a745, #20c997);">
+                📱 Preview (Phone Size)
+            </button>
+        </div>
         
         <div id="result" class="result">
             <h2>🎉 Your Birthday Website is Ready!</h2>

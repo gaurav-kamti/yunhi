@@ -127,7 +127,7 @@ function generateWebsite() {
     collectFriendMessages();
     
     // Generate both pages
-    const giftHTML = generateGiftHTML(recipientName, creatorName, poem, letter, friends, uploadedFiles.photos, uploadedFiles.memes, uploadedFiles.musicAfter);
+    const giftHTML = generateGiftHTML(recipientName, creatorName, poem, letter, friends, uploadedFiles.photos, uploadedFiles.memes, uploadedFiles.musicAfter, birthdayDate);
     const indexHTML = generateIndexHTML(recipientName, birthdayDate, creatorName, giftHTML);
     
     // Open new window and write content
@@ -145,6 +145,30 @@ function openWebsite() {
     } else {
         alert('Please generate the website first!');
     }
+}
+
+function showPreview() {
+    const recipientName = document.getElementById('recipientName').value || 'Special Person';
+    const birthdayDate = document.getElementById('birthdayDate').value;
+    const creatorName = document.getElementById('creatorName').value || 'Someone Special';
+    const poem = document.getElementById('poem').value;
+    const letter = document.getElementById('letter').value;
+    
+    if (!birthdayDate) {
+        alert('Please select a birthday date and time!');
+        return;
+    }
+    
+    collectFriendMessages();
+    
+    // Generate both pages
+    const giftHTML = generateGiftHTML(recipientName, creatorName, poem, letter, friends, uploadedFiles.photos, uploadedFiles.memes, uploadedFiles.musicAfter, birthdayDate);
+    const indexHTML = generateIndexHTML(recipientName, birthdayDate, creatorName, giftHTML);
+    
+    // Open phone-sized preview window
+    const previewWindow = window.open('', 'preview', 'width=375,height=667,resizable=yes,scrollbars=yes');
+    previewWindow.document.write(indexHTML);
+    previewWindow.document.close();
 }
 
 
@@ -204,6 +228,15 @@ function generateIndexHTML(recipientName, birthdayDate, creatorName, giftHTMLCon
 '<div class="timebox"><div class="num" id="m">0</div><div class="label">Minutes</div></div>' +
 '<div class="timebox"><div class="num" id="s">0</div><div class="label">Seconds</div></div>' +
 '</div>' +
+'<form id="guestbookForm" style="margin:12px 0 18px;text-align:left">' +
+'<div style="display:grid;gap:8px">' +
+'<input id="guestName" type="text" placeholder="Your name" required maxlength="40" style="padding:10px;border-radius:10px;border:1px solid #2d3250;background:#141826;color:#eaf9ff">' +
+'<textarea id="guestMessage" placeholder="Your message (max 15 words)" required rows="2" style="padding:10px;border-radius:10px;border:1px solid #2d3250;background:#141826;color:#eaf9ff;resize:vertical"></textarea>' +
+'<div class="muted" id="wordHelp">0 / 15 words</div>' +
+'<button type="submit" class="btn" id="guestSubmit">Send Wish 💌</button>' +
+'<div class="muted" id="guestNote" hidden>Thanks! Your wish is saved.</div>' +
+'</div>' +
+'</form>' +
 '</div>' +
 '</div>' +
 '<template id="birthdayTemplate">' +
@@ -231,6 +264,7 @@ function generateIndexJS(birthdayDate, recipientName, creatorName, giftHTMLBase6
     return 'const GIFT_HTML_B64="' + giftHTMLBase64 + '";' +
 'function decodeGiftHTML(){return decodeURIComponent(escape(atob(GIFT_HTML_B64)))}' +
 'const TARGET=new Date("' + birthdayDate + '");' +
+'const MESSAGES_KEY="birthday_messages_"+TARGET.getTime();' +
 'const ONTIME_DURATION=30*1000;' +
 'const musicBefore=document.getElementById("musicBefore");' +
 'const musicOnTime=document.getElementById("musicOnTime");' +
@@ -254,11 +288,12 @@ function generateIndexJS(birthdayDate, recipientName, creatorName, giftHTMLBase6
 'function spawnEmoji(){const el=document.createElement("div");el.className="confetti";el.textContent=EMOJIS[(Math.random()*EMOJIS.length)|0];const startX=Math.random()*window.innerWidth;const xEnd=Math.random()*120-60;const duration=(6+Math.random()*5).toFixed(2)+"s";el.style.left=startX+"px";el.style.setProperty("--x","0px");el.style.setProperty("--x-end",xEnd+"px");el.style.setProperty("--dur",duration);document.getElementById("confetti-container").appendChild(el);el.addEventListener("animationend",()=>el.remove());setTimeout(()=>el.remove(),15000)}' +
 'function startConfettiContinuous(){for(let i=0;i<40;i++)spawnEmoji();confettiInterval=setInterval(()=>{for(let i=0;i<5;i++)spawnEmoji()},500);setTimeout(()=>{clearInterval(confettiInterval);confettiInterval=null},30000)}' +
 'function openGiftPage(){const giftWin=window.open("","_blank");giftWin.document.write(decodeGiftHTML());giftWin.document.close()}' +
+'(function(){const form=document.getElementById("guestbookForm");if(form){const nameEl=document.getElementById("guestName");const msgEl=document.getElementById("guestMessage");const helpEl=document.getElementById("wordHelp");const submitBtn=document.getElementById("guestSubmit");const noteEl=document.getElementById("guestNote");function countWords(s){const words=s.trim().split(" ").filter(w=>w.length>0);return words.length}function updateCounter(){const wc=countWords(msgEl.value);helpEl.textContent=wc+" / 15 words";helpEl.style.color=wc>15?"#ff6b9e":"var(--muted)";submitBtn.disabled=wc===0||wc>15}msgEl.addEventListener("input",updateCounter);updateCounter();form.addEventListener("submit",async(e)=>{e.preventDefault();const name=nameEl.value.trim();const message=msgEl.value.trim();if(!name||!message)return;submitBtn.disabled=true;submitBtn.textContent="Sending…";try{const messages=JSON.parse(localStorage.getItem(MESSAGES_KEY)||"[]");messages.push({name,message,createdAt:new Date().toISOString()});localStorage.setItem(MESSAGES_KEY,JSON.stringify(messages));form.reset();updateCounter();noteEl.hidden=false;noteEl.textContent="Thanks! Your wish is saved 💖";submitBtn.textContent="Sent ✅";setTimeout(()=>{submitBtn.textContent="Send Wish 💌";submitBtn.disabled=false;noteEl.hidden=true},2000)}catch(err){noteEl.hidden=false;noteEl.textContent="Could not save. Please try again.";submitBtn.textContent="Send Wish 💌";submitBtn.disabled=false;console.error(err)}})}})();' +
 '(function init(){const now=Date.now();const targetTime=TARGET.getTime();if(now>=targetTime+ONTIME_DURATION){startAfterMusic();switchToBirthdayScreen()}else if(now>=targetTime){onReachMidnight()}else{startBeforeMusic();const timer=setInterval(()=>{const diff=TARGET.getTime()-Date.now();if(diff<=0){clearInterval(timer);onReachMidnight()}else renderCountdown(diff)},1000);renderCountdown(targetTime-now)}})();';
 }
 
 
-function generateGiftHTML(recipientName, creatorName, poem, letter, friends, photos, memes, musicAfterSrc) {
+function generateGiftHTML(recipientName, creatorName, poem, letter, friends, photos, memes, musicAfterSrc, birthdayDate) {
     // Generate arrays as strings for embedding in JS
     let memesArrayStr = '[';
     for (let i = 0; i < memes.length; i++) {
@@ -397,19 +432,21 @@ function generateGiftHTML(recipientName, creatorName, poem, letter, friends, pho
 '<footer style="text-align:center">Tip: If audio doesn\'t start automatically, tap the play button.</footer>' +
 '<audio id="bgmSong" src="' + musicAfterSrc + '" preload="auto"></audio>' +
 '<script>' +
-generateGiftJS(memesArrayStr, friendsArrayStr, photosArrayStr, poemEscaped, letterEscaped) +
+generateGiftJS(memesArrayStr, friendsArrayStr, photosArrayStr, poemEscaped, letterEscaped, birthdayDate) +
 '<\/script>' +
 '</body>' +
 '</html>';
 }
 
 
-function generateGiftJS(memesArrayStr, friendsArrayStr, photosArrayStr, poemText, letterText) {
+function generateGiftJS(memesArrayStr, friendsArrayStr, photosArrayStr, poemText, letterText, birthdayDate) {
     return 'const bgm=document.getElementById("bgmSong");' +
 'bgm.loop=true;' +
 'bgm.volume=0.45;' +
 'const memes=' + memesArrayStr + ';' +
-'const friendMessages=' + friendsArrayStr + ';' +
+'const MESSAGES_KEY="birthday_messages_"+new Date("' + birthdayDate + '").getTime();' +
+'let friendMessages=' + friendsArrayStr + ';' +
+'try{const stored=JSON.parse(localStorage.getItem(MESSAGES_KEY)||"[]");if(stored.length>0){friendMessages=friendMessages.concat(stored.map(m=>({name:m.name,text:m.message})))}}catch(e){console.log("No stored messages")}' +
 'const photos=' + photosArrayStr + ';' +
 'const poemText="' + poemText + '";' +
 'const letterText="' + letterText + '";' +
