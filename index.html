@@ -227,10 +227,10 @@
         /* Features */
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
             margin-top: 80px;
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
         }
         
@@ -297,17 +297,170 @@
             z-index: 1;
         }
         
+        /* How It Works Section */
+        .how-it-works {
+            margin-top: 100px;
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(135deg, #fff, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .step-desc {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .stats {
+            margin-top: 100px;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea, #ff6b9e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+        
         /* Footer */
         .footer {
-            margin-top: 80px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.9rem;
+            margin-top: 100px;
+            padding: 60px 40px 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 1400px;
+            width: 100%;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+        
+        .footer-section h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: #667eea;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
         }
         
         /* Responsive */
+        @media (max-width: 1024px) {
+            .features { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+        
         @media (max-width: 768px) {
             .logo { font-size: 4rem; }
             .features { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .cta-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -368,10 +521,102 @@
                 <div class="feature-title">No Coding Required</div>
                 <div class="feature-desc">Easy-to-use editor with instant preview and sharing</div>
             </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Theme Colors</div>
+                <div class="feature-desc">Choose from 6 beautiful color themes to match the vibe</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">📱</div>
+                <div class="feature-title">Mobile Preview</div>
+                <div class="feature-desc">Test your website in phone size before sharing</div>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">🔗</div>
+                <div class="feature-title">Instant Sharing</div>
+                <div class="feature-desc">Generate shareable links instantly, no downloads needed</div>
+            </div>
         </div>
         
+        <!-- How It Works -->
+        <div class="how-it-works">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Fill Details</div>
+                    <div class="step-desc">Enter name, date, and upload your photos & music</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Customize</div>
+                    <div class="step-desc">Add messages, poems, and choose your theme</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Preview</div>
+                    <div class="step-desc">Test in phone size to see how it looks</div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Share</div>
+                    <div class="step-desc">Generate link and share with the birthday person</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats">
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Forever</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Coding Required</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Possibilities</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
         <div class="footer">
-            Made with ❤️ for creating unforgettable birthday moments
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">🎉 Birthday Studio</div>
+                    <div class="footer-desc">
+                        Create magical, personalized birthday experiences with music, photos, and heartfelt messages. 
+                        No coding required, just pure creativity and love.
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <div class="footer-links">
+                        <a href="editor.html" class="footer-link">Create Website</a>
+                        <a href="birthday-countdown.html" class="footer-link">View Demo</a>
+                        <a href="HOW-TO-USE.md" class="footer-link">Documentation</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Features</h3>
+                    <div class="footer-links">
+                        <a href="#" class="footer-link">Countdown Timer</a>
+                        <a href="#" class="footer-link">Music Integration</a>
+                        <a href="#" class="footer-link">Photo Gallery</a>
+                        <a href="#" class="footer-link">Theme Colors</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                Made with ❤️ for creating unforgettable birthday moments • © 2025 Birthday Studio
+            </div>
         </div>
     </div>
     
