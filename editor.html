@@ -422,6 +422,44 @@
             border-color: #ff3b5c;
         }
         
+        .theme-selector {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .theme-option {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            position: relative;
+        }
+        
+        .theme-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+        
+        .theme-option.active {
+            border-color: #fff;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+        }
+        
+        .theme-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
         .result {
             margin-top: 30px;
             padding: 40px;
@@ -500,6 +538,17 @@
             <div class="form-group">
                 <label>Your Name (From)</label>
                 <input type="text" id="creatorName" placeholder="e.g., Badal" value="Badal">
+            </div>
+            <div class="form-group">
+                <label>Theme Color</label>
+                <div class="theme-selector">
+                    <div class="theme-option" data-theme="purple" style="background: linear-gradient(135deg, #667eea, #764ba2);" title="Purple Dream"></div>
+                    <div class="theme-option" data-theme="pink" style="background: linear-gradient(135deg, #ff6b9e, #ffa6c1);" title="Pink Love"></div>
+                    <div class="theme-option" data-theme="blue" style="background: linear-gradient(135deg, #4facfe, #00f2fe);" title="Ocean Blue"></div>
+                    <div class="theme-option" data-theme="sunset" style="background: linear-gradient(135deg, #fa709a, #fee140);" title="Sunset"></div>
+                    <div class="theme-option" data-theme="green" style="background: linear-gradient(135deg, #0ba360, #3cba92);" title="Fresh Green"></div>
+                    <div class="theme-option active" data-theme="galaxy" style="background: linear-gradient(135deg, #667eea, #ff6b9e);" title="Galaxy"></div>
+                </div>
             </div>
             </div>
             

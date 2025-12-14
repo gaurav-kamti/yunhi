@@ -9,6 +9,26 @@ let uploadedFiles = {
 
 let friends = [{name: 'Aarav', message: 'Happy birthday! You light up every room — keep shining ✨'}];
 let generatedWindow = null;
+let selectedTheme = 'galaxy';
+
+// Theme colors mapping
+const themeColors = {
+    purple: { primary: '#667eea', secondary: '#764ba2' },
+    pink: { primary: '#ff6b9e', secondary: '#ffa6c1' },
+    blue: { primary: '#4facfe', secondary: '#00f2fe' },
+    sunset: { primary: '#fa709a', secondary: '#fee140' },
+    green: { primary: '#0ba360', secondary: '#3cba92' },
+    galaxy: { primary: '#667eea', secondary: '#ff6b9e' }
+};
+
+// Handle theme selection
+document.querySelectorAll('.theme-option').forEach(option => {
+    option.addEventListener('click', function() {
+        document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+        selectedTheme = this.dataset.theme;
+    });
+});
 
 // File to base64 converter
 function fileToBase64(file) {
