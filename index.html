@@ -7,462 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0a0a0f;
-            color: #fff;
-            overflow-x: hidden;
-        }
-        
-        /* Animated Background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-            background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0f 100%);
-        }
-        
-        .bg-animation::before,
-        .bg-animation::after {
-            content: '';
-            position: absolute;
-            width: 800px;
-            height: 800px;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.25;
-            animation: float 25s ease-in-out infinite;
-        }
-        
-        .bg-animation::before {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            top: -300px;
-            left: -300px;
-            animation-delay: 0s;
-        }
-        
-        .bg-animation::after {
-            background: linear-gradient(135deg, #ff6b9e, #ffa6c1);
-            bottom: -300px;
-            right: -300px;
-            animation-delay: 12s;
-        }
-        
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            animation: rise 15s linear infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33% { transform: translate(150px, -150px) scale(1.2) rotate(120deg); }
-            66% { transform: translate(-150px, 150px) scale(0.8) rotate(240deg); }
-        }
-        
-        @keyframes rise {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) scale(1);
-                opacity: 0;
-            }
-        }
-        
-        /* Container */
-        .container {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-        /* Logo/Icon */
-        .logo {
-            font-size: 8rem;
-            margin-bottom: 30px;
-            animation: bounce 2s ease-in-out infinite, rotate 20s linear infinite;
-            filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6));
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-30px) rotate(10deg); }
-        }
-        
-        @keyframes rotate {
-            0% { filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6)); }
-            33% { filter: drop-shadow(0 0 30px rgba(255, 107, 158, 0.6)); }
-            66% { filter: drop-shadow(0 0 30px rgba(118, 75, 162, 0.6)); }
-            100% { filter: drop-shadow(0 0 30px rgba(102, 126, 234, 0.6)); }
-        }
-        
-        /* Title */
-        h1 {
-            font-size: clamp(3rem, 10vw, 6rem);
-            font-weight: 900;
-            margin-bottom: 25px;
-            letter-spacing: -3px;
-            background: linear-gradient(135deg, #fff 0%, #667eea 30%, #ff6b9e 60%, #ffa6c1 100%);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: shimmer 4s ease-in-out infinite;
-            text-shadow: 0 0 80px rgba(102, 126, 234, 0.5);
-        }
-        
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        /* Subtitle */
-        .subtitle {
-            font-size: clamp(1.1rem, 3vw, 1.5rem);
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 50px;
-            max-width: 600px;
-            line-height: 1.6;
-        }
-        
-        /* CTA Buttons */
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 60px;
-        }
-        
-        .cta-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 22px 55px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #fff;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border: none;
-            border-radius: 60px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 15px 50px rgba(102, 126, 234, 0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.7s;
-        }
-        
-        .cta-button:hover::before {
-            left: 100%;
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.7);
-        }
-        
-        .cta-button:active {
-            transform: translateY(-4px) scale(1.02);
-        }
-        
-        .cta-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 50px rgba(255, 255, 255, 0.1);
-        }
-        
-        .cta-secondary:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 20px 60px rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Features */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 80px;
-            max-width: 1400px;
-            width: 100%;
-        }
-        
-        .feature {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 35px;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(255, 107, 158, 0.1));
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-        
-        .feature:hover::before {
-            opacity: 1;
-        }
-        
-        .feature:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(102, 126, 234, 0.5);
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
-        }
-        
-        .feature-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            display: inline-block;
-            transition: transform 0.4s;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .feature:hover .feature-icon {
-            transform: scale(1.2) rotate(10deg);
-        }
-        
-        .feature-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #fff;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .feature-desc {
-            color: rgba(255, 255, 255, 0.7);
-            line-height: 1.7;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* How It Works Section */
-        .how-it-works {
-            margin-top: 100px;
-            max-width: 1400px;
-            width: 100%;
-        }
-        
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-align: center;
-            margin-bottom: 60px;
-            background: linear-gradient(135deg, #fff, #667eea);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-        }
-        
-        .step {
-            text-align: center;
-            position: relative;
-        }
-        
-        .step-number {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 900;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-        
-        .step-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        
-        .step-desc {
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.6;
-        }
-        
-        /* Stats Section */
-        .stats {
-            margin-top: 100px;
-            padding: 60px 40px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            max-width: 1400px;
-            width: 100%;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 3.5rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #667eea, #ff6b9e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
-        }
-        
-        .stat-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.1rem;
-        }
-        
-        /* Footer */
-        .footer {
-            margin-top: 100px;
-            padding: 60px 40px 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            max-width: 1400px;
-            width: 100%;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 60px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-brand {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 900;
-            color: #fff;
-        }
-        
-        .footer-desc {
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.6;
-        }
-        
-        .footer-section h3 {
-            color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-        
-        .footer-links {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .footer-link {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-link:hover {
-            color: #667eea;
-        }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.5);
-        }
-        
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .features { grid-template-columns: repeat(2, 1fr); }
-            .steps { grid-template-columns: repeat(2, 1fr); }
-            .stats-grid { grid-template-columns: 1fr; }
-            .footer-content { grid-template-columns: 1fr; }
-        }
-        
-        @media (max-width: 768px) {
-            .logo { font-size: 4rem; }
-            .features { grid-template-columns: 1fr; }
-            .steps { grid-template-columns: 1fr; }
-            .cta-buttons { flex-direction: column; }
-        }
-    </style>
+    <link rel="stylesheet" href="landing.css">
 </head>
 <body>
     <div class="bg-animation">
@@ -568,6 +113,54 @@
             </div>
         </div>
         
+        <!-- Reviews -->
+        <div class="reviews">
+            <h2 class="section-title">What People Say</h2>
+            <div class="reviews-grid">
+                <div class="review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-text">
+                        "This is amazing! Created a beautiful birthday website for my girlfriend in just 10 minutes. She absolutely loved it!"
+                    </div>
+                    <div class="review-author">
+                        <div class="review-avatar">R</div>
+                        <div class="review-info">
+                            <div class="review-name">Rahul Kumar</div>
+                            <div class="review-role">Software Engineer</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-text">
+                        "So easy to use! The music and photo gallery features made it super special. Highly recommend!"
+                    </div>
+                    <div class="review-author">
+                        <div class="review-avatar">P</div>
+                        <div class="review-info">
+                            <div class="review-name">Priya Sharma</div>
+                            <div class="review-role">Designer</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <div class="review-text">
+                        "Perfect for creating personalized birthday surprises. The countdown timer and gift stages are brilliant!"
+                    </div>
+                    <div class="review-author">
+                        <div class="review-avatar">A</div>
+                        <div class="review-info">
+                            <div class="review-name">Amit Patel</div>
+                            <div class="review-role">Student</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Stats -->
         <div class="stats">
             <div class="stats-grid">
@@ -601,16 +194,26 @@
                     <div class="footer-links">
                         <a href="editor.html" class="footer-link">Create Website</a>
                         <a href="birthday-countdown.html" class="footer-link">View Demo</a>
-                        <a href="HOW-TO-USE.md" class="footer-link">Documentation</a>
+                        <a href="README.md" class="footer-link">Documentation</a>
+                        <a href="HOW-TO-USE.md" class="footer-link">User Guide</a>
                     </div>
                 </div>
                 <div class="footer-section">
-                    <h3>Features</h3>
+                    <h3>Resources</h3>
                     <div class="footer-links">
-                        <a href="#" class="footer-link">Countdown Timer</a>
-                        <a href="#" class="footer-link">Music Integration</a>
-                        <a href="#" class="footer-link">Photo Gallery</a>
-                        <a href="#" class="footer-link">Theme Colors</a>
+                        <a href="FEATURES.md" class="footer-link">Features Guide</a>
+                        <a href="FAQ.md" class="footer-link">FAQ</a>
+                        <a href="TROUBLESHOOTING.md" class="footer-link">Troubleshooting</a>
+                        <a href="README.md" class="footer-link">README</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <div class="footer-links">
+                        <a href="mailto:support@birthdaystudio.com" class="footer-link">Email Support</a>
+                        <a href="https://github.com/gaurav-kamti/Birthday_studio" class="footer-link" target="_blank">GitHub</a>
+                        <a href="#" class="footer-link">Report Issue</a>
+                        <a href="#" class="footer-link">Request Feature</a>
                     </div>
                 </div>
             </div>
@@ -620,19 +223,6 @@
         </div>
     </div>
     
-    <script>
-        // Create floating particles
-        const particlesContainer = document.getElementById('particles');
-        const particleCount = 50;
-        
-        for (let i = 0; i < particleCount; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDelay = Math.random() * 15 + 's';
-            particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-            particlesContainer.appendChild(particle);
-        }
-    </script>
+    <script src="landing.js"></script>
 </body>
 </html>
